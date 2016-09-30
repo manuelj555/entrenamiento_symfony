@@ -1,0 +1,35 @@
+{#
+    Este layout lo usarán las páginas a la que acceden los usuarios invitados.
+
+    Ya que se maneja herencia de tres niveles, heredamos del base.html.twig
+    y definimos el contenido generico de las vistas que heredarán de este template.
+#}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% block header %}
+            <header>
+                <div class="jumbotron">
+
+                    <h2>Sistema de reservaciones Online</h2>
+
+                    {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
+
+                        <div class="user-info">
+                            Bienvenido {{ app.user }}!
+
+                            <a href="{{ logout_path() }}" class="logout">Salir</a>
+                        </div>
+
+                    {% endif %}
+                </div>
+            </header>
+        {% endblock %}
+
+        {# Las vistas implementarán su bloque "content" para mostrar su contenido #}
+        {% block content %}
+        {% endblock %}
+
+    </div>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'layout/frontend.html.twig' %}
+
+{% block title 'Inicio de Sesión' %}
+
+{% block content %}
+    <div class="well form-login">
+        <form class="" method="post" action="{{ path('login') }}" id="login-form">
+
+            {% if error %}
+                <p class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+            {% endif %}
+
+            <div class="form-group">
+
+                <label for="inputEmail" class="sr-only">Correo Electrónico</label>
+
+                {# 
+                    Campo del email del usuario que iniciará sesión.
+                    Este campo tiene un atributo especial: 'v-model="email"'
+                    Que es usado por la libreria VueJS para leer el valor del email
+                    ingresado por el usuario
+                #}
+                <input type="email" 
+                    name="username" 
+                    id="inputEmail"
+                    class="form-control" 
+                    v-model="email"
+                    placeholder="Correo Electrónico" 
+                    required 
+                    autofocus
+                    value="{{ last_username }}"
+                >
+
+            </div>
+            <div class="form-group">
+
+                <label for="inputPassword" class="sr-only">Código de Acceso</label>
+
+                <div class="input-group">
+                    
+                    <span class="input-group-btn">
+                        
+                        {#
+                            Este botón se encarga de enviar un correo al usuario con el código de acceso
+                            Se utiliza el atributo especial:
+                            @click.prevent="generateCode('url-generada-con-twig')"
+                            El cual es utilizado por la librería VueJS para invocar a la función
+                            generateCode creada en el login.js
+
+                            El atributo especial :disabled="disableButtons" se encarga de 
+                            desabilitar el campo si el valor de la variable disableButtons es true.
+                            Esta variable se implementa usando la librería VueJS.
+                        #}
+                        <button class="btn btn-success" 
+                            type="button"
+                            @click.prevent="generateCode('{{ path('login_generate_code') }}')"
+                            :disabled="disableButtons"
+                        >
+                            {# 
+                                Se usa el filtro verbatim de twig para no compilar las llaves,
+                                ya que la librería VueJS tambien las usa para imprimir variables
+                            #}
+                            {% verbatim %}
+                                {{ generateCodeLabel }}                                
+                            {% endverbatim %}
+
+                        </button>
+                    </span>
+
+                    <input type="text" name="access_code" id="inputPassword"
+                           class="form-control" placeholder="Código de Acceso"
+                           required autocomplete="off">
+                </div>
+
+            </div>
+
+            {# 
+                Se usa el filtro verbatim de twig para no compilar las llaves,
+                ya que la librería VueJS tambien las usa para imprimir variables
+
+                    El atributo v-show es usado por la librería VueJS para mostrar
+                    la etiqueta html si se cumple la condición indicada como valor del
+                    atributo.
+
+                    En este caso cada parrafo se muestra si la variable "error" o "message"
+                    no están vacias.
+
+                    El atributo especial v-html="message" es usado cuando se quiere mostrar
+                    contenido que contiene html.
+            #}
+            {% verbatim %}
+                <p v-show="error" class="text-danger">{{ error }}</p>
+                <p v-show="message" class="text-success" v-html="message"></p>
+            {% endverbatim %}
+
+            {# 
+                El atributo especial :disabled="disableButtons" se encarga de desabilitar el 
+                campo si el valor de la variable disableButtons es true.
+                Esta variable se implementa usando la librería VueJS.
+            #}
+            <button class="btn btn-lg btn-primary btn-block" type="submit" :disabled="disableButtons">Entrar</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts -%}
+    {{ parent() }}
+    {# Este js es un compilado usando la libreria VueJS #}
+    <script src="{{ asset('build/login.js') }}"></script>
+{% endblock -%}

@@ -1,0 +1,38 @@
+{# Plantilla base con todo lo mínimo necesario para la app #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>
+        {# 
+            Mostramos por defecto el sufijo "Reservaciones Online",
+            La idea del filtro que es si una página no define contenido
+            en el bloque del título, el filtro trim removerá el guión "-"
+            del título de la página.
+        #}
+        {%- filter trim('-') -%}
+            {%- block title -%}{%- endblock -%} - Reservaciones Online
+        {%- endfilter -%}
+    </title>
+
+    {% block stylesheets -%}
+        <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+    {% endblock -%}
+
+</head>
+<body id="{% block body_id '' %}">
+{# 
+    Se implementa herencia de 3 niveles, donde hay dos layouts que extienden del base 
+    frontend.html.twig y admin.html.twig.
+
+    Estos layouts extienden el bloque "body" y definen contenido y bloques más especificos
+    que las vistas de cada página rellenarán con el contenido pertinente.
+#}
+{% block body %}{% endblock %}
+
+{% block javascripts -%}
+    <script type="text/javascript" src="{{ asset('build/libraries.js') }}"></script>
+{% endblock -%}
+
+</body>
+</html>

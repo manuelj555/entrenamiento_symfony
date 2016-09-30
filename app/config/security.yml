@@ -1,0 +1,21 @@
+security:
+    providers:
+        in_memory:
+            memory:
+                users:
+                    - {name: admin, password: 123, roles: [ROLE_ADMIN]}
+    firewalls:
+        dev:  
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            pattern: ^/
+            anonymous: ~
+            form_login:
+                login_path: login
+                check_path: login
+            # http_basic: ~
+            # logout:
+            #     path: logout
+            #     target: login

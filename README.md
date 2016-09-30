@@ -1,0 +1,1 @@
+Ejercicio para aprender a usar Symfony de una manera adecuada.
